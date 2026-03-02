@@ -1,0 +1,46 @@
+<launch>
+    <arg name="robot_namespace" default=""/>
+    <arg name="laser_topic" default="RosAria/scan" />
+    <arg name="odom_topic" default="RosAria/odom" />
+    <arg name="cmd_topic" default="RosAria/cmd_vel" />
+    <arg name="log_filename" default="$(find move_base_benchmark)/launch/log.txt" />
+    <arg name="global_frame" default="map"/>
+    <arg name="global_frame_id" default="map"/>
+    <arg name="odom_frame_id"   value="map"/>
+    <arg name="base_frame_id"   value="$(arg robot_namespace)/base_link"/>
+
+    <group ns="$(arg robot_namespace)">
+        <node pkg="move_base_benchmark" type="move_base_benchmark" respawn="false" name="move_base_benchmark" output="screen">
+            <rosparam file="$(find move_base_benchmark)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+            <rosparam file="$(find move_base_benchmark)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+            <rosparam file="$(find move_base_benchmark)/params/global_costmap_params.yaml" command="load" />
+            <rosparam file="$(find move_base_benchmark)/params/local_costmap_params.yaml" command="load" />
+            <param name="global_costmap/global_frame" value="$(arg global_frame)" />
+            <param name="local_costmap/global_frame" value="$(arg global_frame)" />
+
+            <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+            <param name="planner_frequency" value="1.0" /> 
+            <param name="planner_patience" value="5.0" />
+
+            <param name="base_local_planner" value="ceres_path_smoother/CeresLocalPlannerROS" />
+            <rosparam file="$(find move_base_benchmark)/params/teb_tracking_params_ceres.yaml" command="load" />
+            <param name="primitive_filename" value="$(find lattice_path_planner)/mprim/pr2_5cm.mprim" />
+            <param name="controller_frequency" value="5.0" />
+            <param name="controller_patience" value="15.0" />
+            
+
+            <param name="global_costmap/obstacle_layer/scan/sensor_frame" value="$(arg base_frame_id)"/>
+            <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+            <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+            <param name="global_costmap/obstacle_layer/scan/topic" value="$(arg laser_topic)"/>
+
+            <param name="local_costmap/obstacle_layer/scan/sensor_frame" value="$(arg base_frame_id)"/>
+            <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+            <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+            <param name="local_costmap/obstacle_layer/scan/topic" value="$(arg laser_topic)"/>
+            <param name="log_filename" value="$(arg log_filename)" />
+            <remap from="cmd_vel" to="$(arg cmd_topic)" />
+        </node>
+
+      </group>
+</launch>

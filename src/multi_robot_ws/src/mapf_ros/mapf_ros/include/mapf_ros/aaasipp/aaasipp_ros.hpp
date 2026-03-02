@@ -1,0 +1,83 @@
+#ifndef AAASIPP_ROS_HPP
+#define AAASIPP_ROS_HPP
+
+// ROS headers
+#include <ros/ros.h>
+#include <costmap_2d/costmap_2d_ros.h>
+#include <nav_msgs/Path.h>
+#include <XmlRpcValue.h> 
+#include "mapf_msgs/GlobalPlan.h"
+#include "mapf_msgs/Goal.h"
+#include "mapf_msgs/SinglePlan.h"
+// #include "mapf_msgs/AAASIPPGlobalPlan.h"
+// #include "mapf_msgs/AAASIPPSinglePlan.h"
+
+// Your mapf_ros base class
+#include "mapf_ros/mapf_ros.hpp"
+
+
+// #include "../utils/timer.hpp"
+// #include "eecbs.hpp"
+// #include "eecbs_env.hpp"
+// #include "mapf_ros/mapf_ros.hpp"
+// Your AAA-SIPP-m core headers
+#include "mapf_ros/aaasipp/aa_sipp.h"
+#include "mapf_ros/aaasipp/map.h"
+#include "mapf_ros/aaasipp/task.h"
+#include "mapf_ros/aaasipp/shapes.hpp"
+#include "mapf_ros/aaasipp/dynamicobstacles.h"
+#include "mapf_ros/aaasipp/config.h"
+#include "mapf_ros/aaasipp/searchresult.h"
+#include "mapf_ros/aaasipp/structs.h"
+#include "mapf_ros/aaasipp/lineofsight.h"
+
+namespace mapf {
+
+class AAASIPPROS : public mapf::MAPFROS {
+public:
+    AAASIPPROS();
+    ~AAASIPPROS();
+
+    // The core ROS functions that your plugin must implement
+    void initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros);
+    bool makePlan(const nav_msgs::Path &start, const nav_msgs::Path &goal,
+                  mapf_msgs::GlobalPlan &plan, double &cost,
+                  const double &time_tolerance) override;
+    // bool makePlan(const std::vector<geometry_msgs::PoseStamped>& start_path,
+    //               const std::vector<geometry_msgs::PoseStamped>& goal_path,
+    //               mapf_msgs::GlobalPlan& plan);
+
+
+protected:
+    // Pointers to the core AAA-SIPP-m objects
+    std::unique_ptr<AA_SIPP> planner_;
+    std::unique_ptr<Map> map_;
+    std::unique_ptr<Task> task_;
+    std::unique_ptr<DynamicObstacles> dynamic_obstacles_;
+    std::unique_ptr<Shape> shapes_;
+
+    // Config object to store parameters from ROS
+    Config config_;
+    
+    // Member variables from the base class
+    costmap_2d::Costmap2DROS* costmap_ros_;
+    // ros::Publisher dedicated_plan_pub_; // 新增：专用于发布 AAASIPP 规划结果的发布器
+
+private:
+    // Helper function to convert map from ROS to AAA-SIPP-m
+    void loadMapFromROS();
+
+    // Helper function to convert agents' start/goal from ROS to AAA-SIPP-m
+    void loadTaskFromROS(const nav_msgs::Path &start,
+                         const nav_msgs::Path &goal);
+    // void loadTaskFromROS(const std::vector<geometry_msgs::PoseStamped>& start_path,
+    //                      const std::vector<geometry_msgs::PoseStamped>& goal_path);
+
+    std::vector<geometry_msgs::PoseStamped> convertActionSequenceToPath(const std::vector<Node>& hppath, 
+                           costmap_2d::Costmap2D* costmap,
+                           double resolution);
+};
+
+} // namespace mapf
+
+#endif // AAASIPP_ROS_HPP

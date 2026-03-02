@@ -1,0 +1,70 @@
+<launch>
+
+  <!--  ************** Global Parameters ***************  -->
+  <param name="/use_sim_time" value="true" />
+  <arg name="gui" default="true" />
+
+  <!-- Initial pose -->
+  <arg name="initial_pose_x" default="8.671" />
+  <arg name="initial_pose_y" default="-12.264" />
+  <arg name="initial_pose_a" default="1.571" />
+
+  <!-- Filename -->
+  <arg name="log_filename" default="$(find move_base_benchmark)/launch/log.txt" />
+
+  <arg name="map_filename" default="$(find move_base_benchmark)/map10cm/warehouse/map.yaml" />
+
+  <arg name="global_frame" value="map" />
+
+  <!--  ****** Maps *****  -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_filename)" output="screen">
+    <param name="frame_id" value="$(arg global_frame)" />
+    <param name="resolution" value="0.5" />
+  </node>
+
+
+ <node pkg="move_base_benchmark" type="tf_publish.py" name="tf_publish" output="screen"/>
+
+  <group ns="p1">
+    <include file="$(find p3dx_gazebo)/launch/spawn_p3dx.launch">
+      <arg name="robot_namespace" value="p1" />
+      <arg name="initial_pose_x" value="-1" />
+      <arg name="initial_pose_y" value="4" />
+      <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
+    </include> 
+  </group>
+
+  <group ns="p2">
+    <include file="$(find p3dx_gazebo)/launch/spawn_p3dx.launch">
+      <arg name="robot_namespace" value="p2" />
+      <arg name="initial_pose_x" value="1" />
+      <arg name="initial_pose_y" value="-7" />
+      <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
+    </include> 
+  </group>
+
+  <group ns="p3">
+    <include file="$(find p3dx_gazebo)/launch/spawn_p3dx.launch">
+      <arg name="robot_namespace" value="p3" />
+      <arg name="initial_pose_x" value="-4" />
+      <arg name="initial_pose_y" value="-8" />
+      <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
+    </include> 
+  </group>
+
+  <include file="$(find move_base_benchmark)/launch/move_base_single.launch">
+    <arg name="robot_namespace" value="p1" />
+  </include>
+
+  <include file="$(find move_base_benchmark)/launch/move_base_single.launch">
+    <arg name="robot_namespace" value="p2" />
+  </include>
+
+  <include file="$(find move_base_benchmark)/launch/move_base_single.launch">
+    <arg name="robot_namespace" value="p3" />
+  </include>
+
+  <!--  **************** Visualisation ****************  -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find move_base_benchmark)/launch/rviz_navigation_multi.rviz" />
+
+</launch>

@@ -1,0 +1,56 @@
+# ROS 编译产物
+devel/
+build/
+install/
+logs/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.orig
+*.swp
+*.swo
+*~
+
+# IDE 和编辑器
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-*
+.DS_Store
+
+# 日志和 bag 文件
+*.bag
+*.bag.active
+*.db
+*.sqlite
+
+# 本地配置文件
+*.local
+*.user
+*.user.*
+*.ini
+*.conf
+
+# 临时文件
+*.tmp
+*.temp
+*.cache
+*.lock
+*.log
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 大型数据文件（如果用 Git LFS 则需在 .gitattributes 中跟踪）
+*.usd
+*.usda
+*.usdc
+*.usdz
+*.urdf
+*.world
+*.png
+*.jpg
+*.mp4

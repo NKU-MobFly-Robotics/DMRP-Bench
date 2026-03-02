@@ -1,0 +1,7 @@
+<library path="lib/libaaasipp_planner_ros">
+  <class name="mapf_planner/AAASIPPROS" type="mapf::AAASIPPROS" base_class_type="mapf::MAPFROS">
+    <description>
+      A implementation of aaasipp planner.
+    </description>
+  </class>
+</library>

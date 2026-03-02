@@ -1,0 +1,51 @@
+# the number of agents
+agent_num: 6
+# global frame_id in /tf
+global_frame_id: map
+
+# if the time limit is exceeded, the algorithm will automatically exit
+planner_time_tolerance: 10
+
+# mapf_base node will execute mapf algorithm in a loop until the goal is reached, 
+# this parameter is better set to be the same as the map resolution
+goal_tolerance: 0.2
+
+# the frame_id for each agent in the map
+base_frame_id:
+  agent_0: p1/base_link
+  agent_1: p2/base_link
+  agent_2: p3/base_link
+  agent_3: p4/base_link
+  agent_4: p5/base_link
+  agent_5: p6/base_link
+
+# plan_topic will be used to publish gui path in rviz
+plan_topic:
+  agent_0: p1/plan
+  agent_1: p2/plan
+  agent_2: p3/plan
+  agent_3: p4/plan
+  agent_4: p5/plan
+  agent_5: p6/plan
+
+# the following params are for goal_transformer and plan_executor
+
+# for plan_executor
+# topic "(arg agent_name)/move_base/goal" will be send to move_base 
+agent_name:
+  agent_0: p1
+  agent_1: p2
+  agent_2: p3
+  agent_3: p4
+  agent_4: p5
+  agent_5: p6
+
+# for goal_transformer
+# used to receive goal for each agent
+goal_topic:
+  agent_0: p1/goal
+  agent_1: p2/goal
+  agent_2: p3/goal
+  agent_3: p4/goal
+  agent_4: p5/goal
+  agent_5: p6/goal

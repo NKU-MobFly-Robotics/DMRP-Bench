@@ -1,0 +1,7 @@
+<library path="lib/libeecbs_planner_ros">
+  <class name="mapf_planner/EECBSROS" type="mapf::EECBSROS" base_class_type="mapf::MAPFROS">
+    <description>
+      A implementation of eecbs planner.
+    </description>
+  </class>
+</library>
