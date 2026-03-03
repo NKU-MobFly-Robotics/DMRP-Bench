@@ -32,39 +32,50 @@ rosdep install --from-paths src --ignore-src -r -y
 cd ~/DMRP-Bench
 catkin_make -DCMAKE_BUILD_TYPE=Release
 source devel/setup.bash
+
+```
 ### 3. Run a Benchmark
-Step 1: Launch the simulation
+
+- Step 1: Launch the simulation
 Start Isaac Sim:
 
-bash
+```bash
 /path/to/isaac_sim/isaac-sim.sh
+```
+
 In Isaac Sim, open File → Open and select one of the provided scene files in the scenes/ directory, e.g., Library.usd, OpenOffice.usd, or Shopping.usd. 
 
-Step 2: Start the ROS socket server
-bash
+- Step 2: Start the ROS socket server
+
+```bash
 cd scripts
 python3 pose_socket_server.py
-Step 3: Send pedestrian poses from Isaac Sim
+```
+
+- Step 3: Send pedestrian poses from Isaac Sim
 In Isaac Sim, open Script Editor (Window → Script Editor) and run the script from scripts/isaac_send_pedestrian_poses.py (copy the code from that file).
 
 The system will automatically start planning and recording data. Bag files are saved in the bags/ directory inside the repository.
 
+
 ### 4. Analyze Results
-bash
+```bash
 python3 scripts/analyze_multi_robot_bag.py --bag ./bags/your-bag-file.bag
+```
 The analysis report will be saved as your-bag-file_analysis.txt.
 
-Configuration
+
+### Configuration
 Local planners: To adjust parameters for TEB, DWA, MPC, or Ceres, modify the corresponding YAML files in move_base_benchmark/params/. To switch between different local planners, edit the launch file move_base_benchmark/launch/aa.launch.
 
 Global planners: To change the global planner (CBS, ECBS-8, SIPP, EECBS), modify the launch file mapf_base/launch/mapf_example.launch and specify the desired planner type.
 
 Pedestrian models: The actors in the scene already have collision properties; no extra setup needed.
 
-Citation
+### Citation
 If you use this benchmark in your research, please cite:
 
-bibtex
+```bibtex
 @inproceedings{hu2026dmrp,
   title={DMRP-Bench: An Integrated, Unified Multi-Robot Motion Planning Benchmark in Dynamic Environments},
   author={Hu, Zhijie and Zhang, Xuebo and Wang, Runhua and Li, Yichen and Bi, Qingchen},
