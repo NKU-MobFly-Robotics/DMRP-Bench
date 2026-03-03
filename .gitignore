@@ -54,3 +54,6 @@ __pycache__/
 *.png
 *.jpg
 *.mp4
+
+!docs/**
+!scenes/**
